@@ -1,0 +1,239 @@
+/* 1. Import Font & Define Palette */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --color-primary: #007bff;
+    --color-primary-dark: #0056b3;
+    --color-bg-light: #f8f9fa;
+    --color-bg-dark: #f4f7f6;
+    --color-surface: #ffffff;
+    --color-text-primary: #212529;
+    --color-text-secondary: #495057;
+    --color-border: #dee2e6;
+    --color-success: #28a745;
+    --color-error: #dc3545;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --border-radius: 12px;
+}
+
+/* 2. New Body Layout */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg-light);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 3. New Header & Nav Styles */
+.navbar {
+    width: 100%;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky; /* Makes the header stay at the top */
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.navbar nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.navbar nav li {
+    margin-left: 1.5rem;
+}
+
+.navbar nav a {
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar nav a:hover,
+.navbar nav a.active {
+    color: var(--color-primary);
+}
+
+/* 4. New Main Content Layout (2-Column Grid) */
+.main-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto; /* Top/bottom and left/right margin */
+    padding: 0 2rem;
+    flex-grow: 1; /* Makes main content fill space */
+    
+    display: grid;
+    /* On mobile: 1 column */
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+/* On screens 800px and wider, use 2 columns */
+@media (min-width: 800px) {
+    .main-content {
+        /* Form: 1 part, Feed: 1.5 parts */
+        grid-template-columns: 1fr 1.5fr; 
+    }
+}
+
+/* 5. New Card Style (replaces old .container) */
+.card {
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+}
+
+/* This makes the form card "stick" as you scroll */
+@media (min-width: 800px) {
+    #submit-card {
+        align-self: flex-start;
+        position: sticky;
+        top: 80px; /* 60px header + 20px margin */
+    }
+}
+
+
+h2 {
+    text-align: left;
+    color: var(--color-text-primary);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+}
+
+/* 6. Form Styles (Slightly tweaked) */
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-sizing: border-box; 
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease-in-out;
+}
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+button[type="submit"] {
+    width: 100%;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+button[type="submit"]:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,123,255,0.2);
+}
+button[type="submit"]:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+#status-message {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+#status-message:not(:empty) { padding: 0.75rem; border-radius: 8px; }
+#status-message[style*="green"] { background-color: rgba(40, 167, 69, 0.1); color: var(--color-success); }
+#status-message[style*="red"] { background-color: rgba(220, 53, 69, 0.1); color: var(--color-error); }
+
+/* 7. Guestbook Feed Styles */
+#guestbook-feed {
+    /* Set a max-height to make it scrollable */
+    max-height: 70vh; 
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.message-card {
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.5s ease-out; /* Add fade-in */
+}
+
+.message-card p {
+    color: var(--color-text-primary);
+    margin: 0 0 1rem 0;
+    white-space: pre-wrap; /* Keeps line breaks from the textarea */
+    font-size: 1rem;
+    line-height: 1.6;
+}
+.message-card .meta {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.message-card .meta .author {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 8. New Footer Style */
+.footer {
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    margin-top: auto; /* Pushes footer to bottom */
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}

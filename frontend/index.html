@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cloud Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. NEW: Navigation Header -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">My Cloud Hub</div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Guestbook</a></li>
+                    <li><a href="#">(Coming Soon)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 2. NEW: Main Content Area -->
+    <main class="main-content">
+        <!-- Card 1: The Form -->
+        <div class="card" id="submit-card">
+            <h2>Leave a Message</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email (Private, for notifications)</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Public Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" id="submit-button">Sign the Guestbook</button>
+                <p id="status-message"></p>
+            </form>
+        </div>
+
+        <!-- Card 2: The Guestbook Feed -->
+        <div class="card" id="feed-card">
+            <h2>Public Guestbook</h2>
+            <div id="guestbook-feed">
+                <!-- Messages will be loaded here by app.js -->
+                <p>Loading messages...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3. NEW: Footer -->
+    <footer class="footer">
+        <p>Project 2 of my Cloud Career Journey. Built with Terraform & AWS Serverless.</p>
+    </footer>
+
+    <!-- Your JS file is unchanged and does not need to be replaced -->
+    <script src="app.js"></script>
+</body>
+</html>
