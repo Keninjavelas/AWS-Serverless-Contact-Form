@@ -1,0 +1,47 @@
+# This file's name: frontend-deploy.yml
+
+name: Deploy Frontend Website
+
+# This 'on' block is the trigger.
+# It runs ONLY on a push to the 'main' branch
+# AND only if files *inside* the 'frontend/' folder were changed.
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'frontend/**'
+
+# This allows the workflow to request a secure token from AWS
+permissions:
+  id-token: write # Required for OIDC (passwordless) authentication
+  contents: read  # Required to check out your code
+
+jobs:
+  # This is the name of the job
+  deploy-frontend:
+    # It will run on a new virtual machine hosted by GitHub
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Check out a copy of your code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Securely log in to AWS using the OIDC role
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          # This is the ARN of the role you created in IAM.
+          # Make sure 'GitHubActions-AdminRole' matches the name you gave it.
+          role-to-assume: arn:aws:iam::033407688613:role/GitHubActions-AdminRole
+          
+      # Step 3: Run the 'aws s3 sync' command
+      - name: Deploy static site to S3
+        run: |
+          aws s3 sync ./frontend/ s3://serverless-contact-form-20251105154349392600000001
+          
+      # Step 4: Run the 'aws cloudfront create-invalidation' command
+      - name: Create CloudFront Invalidation (Clear Cache)
+        run: |
+          aws cloudfront create-invalidation --distribution-id E2ZLBAUHO9FZUY --paths "/*"

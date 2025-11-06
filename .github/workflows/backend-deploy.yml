@@ -1,0 +1,58 @@
+# This file's name: backend-deploy.yml
+
+name: Deploy Backend Infrastructure
+
+# This 'on' block is the trigger.
+# It runs ONLY on a push to the 'main' branch
+# AND only if files *inside* the 'backend/' folder were changed.
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+
+# This allows the workflow to request a secure token from AWS
+permissions:
+  id-token: write # Required for OIDC (passwordless) authentication
+  contents: read  # Required to check out your code
+
+jobs:
+  # This is the name of the job
+  deploy-backend:
+    # It will run on a new virtual machine hosted by GitHub
+    runs-on: ubuntu-latest
+
+    # Tell Terraform to use the 'backend' folder
+    defaults:
+      run:
+        working-directory: ./backend
+        
+    steps:
+      # Step 1: Check out a copy of your code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install the Terraform CLI on the virtual machine
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # Step 3: Securely log in to AWS using the OIDC role
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          # This is the *same* ARN of the role you created in IAM
+          role-to-assume: arn:aws:iam::033407688613:role/GitHubActions-AdminRole
+
+      # Step 4: Run 'terraform init' to download providers
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 5: (Optional but good practice) Run 'terraform validate'
+      - name: Terraform Validate
+        run: terraform validate
+        
+      # Step 6: Run 'terraform apply' to deploy changes
+      # -auto-approve skips the "Type 'yes' to continue" prompt
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
